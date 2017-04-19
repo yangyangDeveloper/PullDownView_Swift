@@ -8,12 +8,12 @@
 
 import UIKit
 
-class PullDownView: UIView , UITableViewDelegate, UITableViewDataSource {
+public class PullDownView: UIView , UITableViewDelegate, UITableViewDataSource {
     
     var borderColor:UIColor!
     var showPoint:CGPoint!
-    var titleArray:NSArray = []
-    var imageArray:NSArray = []
+    var titleArray:[String]!
+    var imageArray:[String]!
     var tableView:UITableView!
     var cellClickClosure:((_ index: NSInteger ) -> ())?
     
@@ -29,11 +29,11 @@ class PullDownView: UIView , UITableViewDelegate, UITableViewDataSource {
         self.borderColor = self.RGBColor(200, 200, 200)
     }
     
-    required init?(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    convenience init(point: CGPoint, titles: NSArray, images: NSArray) {
+    convenience init(point: CGPoint, titles: [String], images: [String]) {
         self.init()
         self.showPoint = point
         self.titleArray = titles
@@ -57,23 +57,23 @@ class PullDownView: UIView , UITableViewDelegate, UITableViewDataSource {
         // 高
         frame.size.height = CGFloat(self.titleArray.count) * rowHeight + sapce + pullDownArrowHeight
         // 宽
-        for title in self.titleArray {
-            let strTitle   = "\(title)"
+        
+        for (_,value) in self.titleArray.enumerated() {
             let option     = NSStringDrawingOptions.usesLineFragmentOrigin
             let attributes = [NSFontAttributeName: UIFont.systemFont(ofSize: 16)]
             let size = CGSize(width:300 ,height: 100)
-            let strSize = strTitle.boundingRect(with:size, options: option, attributes: attributes, context: nil).size
+            let strSize = (value as AnyObject).boundingRect(with:size, options: option, attributes: attributes, context: nil).size
             let width:CGFloat = strSize.width
             frame.size.width = max(width, frame.size.width)
         }
+        
         // 左边距10 + 文本长度 + 右边距40
         frame.size.width = 10 + frame.size.width + 40
         // 如果有icon，左边距 + 图片自身宽
         if self.titleArray.count == self.imageArray.count {
             frame.size.width += 35
         }
-        // X
-        // 设置左间隔 最小5
+        // X(设置左间隔 最小5)
         frame.origin.x = self.showPoint.x - frame.size.width/2
         if frame.origin.x < 5 {
             frame.origin.x = 5
@@ -124,11 +124,11 @@ class PullDownView: UIView , UITableViewDelegate, UITableViewDataSource {
         }
     }
 
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return titleArray.count
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let identifier = "identtifier";
         var cell = tableView.dequeueReusableCell(withIdentifier: identifier)
         if(cell == nil){
@@ -137,15 +137,15 @@ class PullDownView: UIView , UITableViewDelegate, UITableViewDataSource {
         cell?.backgroundView = UIView()
         cell?.backgroundColor = self.RGBColor(245, 245, 245)
         if self.imageArray.count == self.titleArray.count {
-            cell?.imageView?.image = UIImage(named:"\(self.imageArray.object(at: indexPath.row))")
+            cell?.imageView?.image = UIImage(named:self.imageArray[indexPath.row])
             
         }
         cell?.textLabel?.font = UIFont.systemFont(ofSize: 16)
-        cell?.textLabel?.text = "\(self.titleArray.object(at: indexPath.row))"
+        cell?.textLabel?.text = self.titleArray[indexPath.row]
         return cell!
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at:indexPath, animated: true);
         if cellClickClosure != nil {
             cellClickClosure!(indexPath.row)
@@ -153,11 +153,11 @@ class PullDownView: UIView , UITableViewDelegate, UITableViewDataSource {
         self.dismiss(animate: true)
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return rowHeight
     }
     
-    override func draw(_ rect: CGRect) {
+    public override func draw(_ rect: CGRect) {
         self.borderColor.set()
         let drawingRect = CGRect(x:0,y:10,width:self.bounds.size.width,height:self.bounds.size.height - pullDownArrowHeight)
         

@@ -35,8 +35,8 @@ class ViewController: UIViewController {
 
     func button1Clicked(sender:UIButton) {
         let point = CGPoint(x:sender.frame.origin.x + sender.frame.size.width/2 , y: sender.frame.origin.y + sender.frame.size.height)
-        let titles:NSArray = ["有图iOS开发进阶1", "价格", "评论","销量", "价格", "评论"]
-        let images:NSArray = ["icon.png", "icon.png", "icon.png","icon.png", "icon.png", "icon.png"]
+        let titles:Array = ["有图iOS开发进阶1", "价格", "评论","销量", "价格", "评论"]
+        let images:Array = ["icon.png", "icon.png", "icon.png","icon.png", "icon.png", "icon.png"]
         let pullDown = PullDownView(point:point, titles:titles, images:images)
         pullDown.cellClickClosure = {(index) -> Void in
             print("select index" + String(index))
@@ -46,9 +46,9 @@ class ViewController: UIViewController {
     
     func button2Clicked(sender:UIButton) {
         let point = CGPoint(x:sender.frame.origin.x + sender.frame.size.width/2 , y: sender.frame.origin.y + sender.frame.size.height)
-        let titles:NSArray = ["无图iOS开发进阶1", "无图iOS开发进阶2", "无图iOS开发进阶3"]
-        let images:NSArray = []
-        let pullDown = PullDownView(point:point, titles:titles, images: images)
+        let titles:Array = ["无图iOS开发进阶1", "无图iOS开发进阶2", "无图iOS开发进阶3"]
+        let images:Array = Array<String>()
+        let pullDown = PullDownView(point:point, titles:titles, images:images)
         pullDown.cellClickClosure = {(index) -> Void in
             print("select index" + String(index))
         }
